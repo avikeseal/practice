@@ -34,6 +34,10 @@ orbital_radius = 200
 angle = 0
 #angular speed (radians per frame):
 angular_speed = 0.02
+#mass of the ball:
+ball_mass = 1000
+#gravitational force of the ball:
+ball_gravity = 300
 
 #list to store path:
 orbital_path = []
