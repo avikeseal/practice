@@ -15,12 +15,13 @@ pygame.init()
 #setting up the screen:
 WIDTH, HEIGHT = 800, 800
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Circular motion")
+pygame.display.set_caption("Gravity Simulation")
 
 #set up the clock for a decent framerate:
 clock = pygame.time.Clock()
 
 #define colors:
+
 GREEN = (0,128,0)
 YELLOW = (255,255,0)
 BLACK = (0, 0, 0)
@@ -28,45 +29,30 @@ RED = (255, 0, 0)
 
 #define the object:
 
-#radius of first object:
+#radius:
 ball_radius = 20
-#position of first object:
+#position of central object:
 ball_pos = [WIDTH // 2, HEIGHT // 2]
-
-#center of the circular path:
-#center_x, center_y = 400, 300
-
-#radius of the circular path:
-orbital_radius = 100
-#starting angle:  
-angle = 0
-#angular speed (radians per frame):
-angular_speed = 0.04
-#mass of the ball:
 ball_mass = 1000
-#velocity:
-ball_v = [-1, -3]
-#force-components in x and y direction:
-#force1 = 
 
-#defining another object:
-ball2_radius = 20
+#defining moving object:
+
+#radius:
+ball2_radius = 10
 #position of second object:
 ball2_pos = [WIDTH // 2 + 200, HEIGHT // 2]
-#radius of the circular path:
-orbital_radius2 = 200
-#angular speed:
-angular_speed2 = 0.02
 #mass for second object:
-ball2_mass = 2000
-#velocity:
+ball2_mass = 40
+#initial velocity:
 ball2_v = [0, -2]
+
+#gravitational constant:
+G = 1
 
 
 
 #list to store path:
-orbital_path = []
-orbital_path2 = []
+path = []
 
 #main game loop:
 run = True
@@ -79,9 +65,9 @@ while run:
             run = False
 
     #calculates the vector from first to second object:
-    dx = ball_pos[0] - ball_pos[0]
-    dy = ball2_pos[1] - ball2_pos[1]
-    distance = math.sqrt( (dx**2) + (dy**2) )
+    dx = ball_pos[0] - ball2_pos[0]
+    dy = ball_pos[1] - ball2_pos[1]
+    distance = math.sqrt( (dx**2)  + (dy**2) )
 
     #calculating gravity:
 
@@ -112,7 +98,7 @@ while run:
 
     #draw the ball:
     pygame.draw.circle(screen, RED, (int(ball_pos[0]), int(ball_pos[1])), ball_radius)
-    pygame.draw.circle(screen, GREEN,(int(ball2_pos[0]), int(ball2_pos[1])), ball2_radius)    
+    pygame.draw.circle(screen, GREEN, (int(ball2_pos[0]), int(ball2_pos[1])), ball2_radius)    
     
     #inserting the frame rate first and display next seems to run the program
 
