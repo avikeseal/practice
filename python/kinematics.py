@@ -87,6 +87,10 @@ while run:
 
     #fill the screen with black:
     screen.fill(BLACK)
+
+    #if len(path) > 1:
+        #pygame.draw.lines(screen, YELLOW, False, path, 2)
+
     #draw the ball:
     pygame.draw.circle(screen, RED, (int(ball_pos[0]), int(ball_pos[1])), ball_radius)
     pygame.draw.circle(screen, GREEN, (int(ball2_pos[0]), int(ball2_pos[1])), ball2_radius)    
