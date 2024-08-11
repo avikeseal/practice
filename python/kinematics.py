@@ -70,6 +70,11 @@ while run:
     distance = math.sqrt( (dx**2)  + (dy**2) )
 
     #calculating gravity:
+    if distance > 0:
+        force = (G * ball_mass * ball2_mass) / (distance**2)
+        angle = math.atan2(dy,dx)
+        force_x = force * math.cos(angle)
+        force_y = force * math.sin(angle)
 
 
 
