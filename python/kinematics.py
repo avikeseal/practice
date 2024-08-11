@@ -76,31 +76,17 @@ while run:
         force_x = force * math.cos(angle)
         force_y = force * math.sin(angle)
 
+        #updating object's velocity:
+        ball2_v[0] += force_x / ball2_mass
+        ball2_v[1] += force_y / ball2_mass
 
+    #updating the object's position:
+    ball2_pos[0] += ball2_v[0]
+    ball2_pos[1] += ball2_v[1]
 
-
-    #game state update:
-    #this updates the position of the ball to move in circular path
-    #calculates the new x and y coordinates using trig functions based on the current 'angle'.
-    #angle is then incremented by 'angular speed' to ensure continous motion:
-    #ball_x = center_x + orbital_radius * math.cos(angle) 
-    #ball_y = center_y + orbital_radius * math.sin(angle)
-    #ball2_x = center_x + orbital_radius2 * math.cos(angle)
-    #ball2_y = center_y + orbital_radius2 * math.sin(angle)
-    angle += angular_speed
-
-    #store the position in the path list:
-    orbital_path.append((ball_pos, ball_pos))
-    orbital_path2.append((ball2_pos,ball2_pos))
 
     #fill the screen with black:
     screen.fill(BLACK)
-
-    #draw the orbital path:
-    if len(orbital_path) > 1:
-        pygame.draw.lines(screen, YELLOW, False, orbital_path, 1)
-        pygame.draw.lines(screen, YELLOW, False, orbital_path2, 1)
-
     #draw the ball:
     pygame.draw.circle(screen, RED, (int(ball_pos[0]), int(ball_pos[1])), ball_radius)
     pygame.draw.circle(screen, GREEN, (int(ball2_pos[0]), int(ball2_pos[1])), ball2_radius)    
