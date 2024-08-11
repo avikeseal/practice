@@ -84,12 +84,14 @@ while run:
     ball2_pos[0] += ball2_v[0]
     ball2_pos[1] += ball2_v[1]
 
+    path.append((ball2_pos))
+
 
     #fill the screen with black:
     screen.fill(BLACK)
 
-    #if len(path) > 1:
-        #pygame.draw.lines(screen, YELLOW, False, path, 2)
+    if len(path) > 1:
+        pygame.draw.lines(screen, YELLOW, False, path, 2)
 
     #draw the ball:
     pygame.draw.circle(screen, RED, (int(ball_pos[0]), int(ball_pos[1])), ball_radius)
