@@ -34,6 +34,9 @@ angle = 0
 #angular speed (radians per frame):
 angular_speed = 0.02
 
+#list to store path:
+orbital_path = []
+
 #main game loop:
 run = True
 while run:
