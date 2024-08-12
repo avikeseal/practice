@@ -6,6 +6,9 @@
 import pygame
 import sys
 import math
+import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 
 #intializing pygame:
 pygame.init()
@@ -44,10 +47,10 @@ ball2_pos = [WIDTH // 2 + 200, HEIGHT // 2]
 #mass for second object:
 ball2_mass = 40
 #initial velocity:
-ball2_v = [0, -2]
+ball2_v = [0, -2.5]
 
 #gravitational constant:
-G = 1
+G = 1.3
 
 
 
@@ -84,7 +87,7 @@ while run:
     ball2_pos[0] += ball2_v[0]
     ball2_pos[1] += ball2_v[1]
 
-    path.append((ball2_pos))
+    path.append((int(ball2_pos[0]), int(ball2_pos[1])))
 
 
     #fill the screen with black:
