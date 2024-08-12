@@ -93,6 +93,13 @@ while run:
     velocity = math.sqrt( (ball2_v[0]**2) + (ball2_v[1]**2) )
     velocity.append(velocity)
 
+    #create a graph using matplotlib:
+    fig, ax = plt.subplots()
+    ax.plot(velocity, label='velocity')
+    ax.axhline(y=np.min(velocity), color='r', linestyle='--', label='min velocity')
+    ax.axhline(y=np.max(velocity), color='g', linestyle='--', label='max velocity')
+    ax.legend()
+
 
     #fill the screen with black:
     screen.fill(BLACK)
