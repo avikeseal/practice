@@ -16,7 +16,7 @@ pygame.init()
 
 
 #setting up the screen:
-WIDTH, HEIGHT = 800, 800
+WIDTH, HEIGHT = (1000, 1000)
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Gravity Simulation")
 
@@ -47,16 +47,16 @@ ball2_pos = [WIDTH // 2 + 200, HEIGHT // 2]
 #mass for second object:
 ball2_mass = 40
 #initial velocity:
-ball2_v = [0, -2.5]
+ball2_v = [0, -5]
 
 #gravitational constant:
-G = 1.3
+G = 1
 
 
 
 #list to store path and velocities:
 path = []
-velocity = []
+v = []
 
 #main game loop:
 run = True
@@ -91,15 +91,26 @@ while run:
     #store the current position and velocity:
     path.append((int(ball2_pos[0]), int(ball2_pos[1])))
     velocity = math.sqrt( (ball2_v[0]**2) + (ball2_v[1]**2) )
-    velocity.append(velocity)
+    v.append(velocity)
 
     #create a graph using matplotlib:
-    fig, ax = plt.subplots()
+    #adjust figure size:
+    fig, ax = plt.subplots(figsize=(4,2))
     ax.plot(velocity, label='velocity')
     ax.axhline(y=np.min(velocity), color='r', linestyle='--', label='min velocity')
     ax.axhline(y=np.max(velocity), color='g', linestyle='--', label='max velocity')
     ax.legend()
 
+    #rendering the graph to pygame:
+    canvas = FigureCanvas(fig)
+    canvas.draw()
+    renderer = canvas.get_renderer()
+    raw_data = renderer.tostring_rgb()
+
+    size = canvas.get_width_height()
+    graph_surface =  pygame.image.fromstring(raw_data, size, "RGB")
+    #close the figure to free up memory:
+    plt.close(fig)
 
     #fill the screen with black:
     screen.fill(BLACK)
@@ -111,10 +122,14 @@ while run:
     pygame.draw.circle(screen, RED, (int(ball_pos[0]), int(ball_pos[1])), ball_radius)
     pygame.draw.circle(screen, GREEN, (int(ball2_pos[0]), int(ball2_pos[1])), ball2_radius)    
     
+    #display the graph:
+    #adjust position as needed:
+    screen.blit(graph_surface, (50, 200))
+
     #inserting the frame rate first and display next seems to run the program
 
     #cap the frame rate at 60 fps:
-    clock.tick(60)
+    clock.tick(100)
 
     #updating the display:
     pygame.display.flip()
