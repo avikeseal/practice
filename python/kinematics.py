@@ -45,12 +45,12 @@ ball2_radius = 10
 #position of second object:
 ball2_pos = [WIDTH // 2 + 200, HEIGHT // 2]
 #mass for second object:
-ball2_mass = 40
+ball2_mass = 1
 #initial velocity:
-ball2_v = [0, -2]
+ball2_v = [0, -5]
 
 #gravitational constant:
-G = 1
+G = 5
 
 
 
