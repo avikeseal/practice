@@ -54,8 +54,9 @@ G = 1.3
 
 
 
-#list to store path:
+#list to store path and velocities:
 path = []
+velocity = []
 
 #main game loop:
 run = True
@@ -87,7 +88,10 @@ while run:
     ball2_pos[0] += ball2_v[0]
     ball2_pos[1] += ball2_v[1]
 
+    #store the current position and velocity:
     path.append((int(ball2_pos[0]), int(ball2_pos[1])))
+    velocity = math.sqrt( (ball2_v[0]**2) + (ball2_v[1]**2) )
+    velocity.append(velocity)
 
 
     #fill the screen with black:
