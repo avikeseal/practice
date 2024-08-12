@@ -96,9 +96,15 @@ while run:
     #create a graph using matplotlib:
     #adjust figure size:
     fig, ax = plt.subplots(figsize=(4,2))
+    #create figure:
     ax.plot(v, label='velocity')
-    ax.axhline(y=np.min(velocity), color='r', linestyle='--', label='min velocity')
-    ax.axhline(y=np.max(velocity), color='g', linestyle='--', label='max velocity')
+
+    if len(v) > 0:
+        min_v = np.min(v)
+        max_v = np.max(v)
+        ax.axhline(y=min_v, color='r', linestyle='--', label='min velocity')
+        ax.axhline(y=max_v, color='g', linestyle='--', label='max velocity')
+
     ax.legend()
 
     #rendering the graph to pygame:
