@@ -47,7 +47,7 @@ ball2_pos = [WIDTH // 2 + 200, HEIGHT // 2]
 #mass for second object:
 ball2_mass = 40
 #initial velocity:
-ball2_v = [0, -5]
+ball2_v = [0, -2]
 
 #gravitational constant:
 G = 1
@@ -96,7 +96,7 @@ while run:
     #create a graph using matplotlib:
     #adjust figure size:
     fig, ax = plt.subplots(figsize=(4,2))
-    ax.plot(velocity, label='velocity')
+    ax.plot(v, label='velocity')
     ax.axhline(y=np.min(velocity), color='r', linestyle='--', label='min velocity')
     ax.axhline(y=np.max(velocity), color='g', linestyle='--', label='max velocity')
     ax.legend()
@@ -119,17 +119,18 @@ while run:
         pygame.draw.lines(screen, YELLOW, False, path, 2)
 
     #draw the ball:
-    pygame.draw.circle(screen, RED, (int(ball_pos[0]), int(ball_pos[1])), ball_radius)
-    pygame.draw.circle(screen, GREEN, (int(ball2_pos[0]), int(ball2_pos[1])), ball2_radius)    
+    pygame.draw.circle(screen, RED, ( int(ball_pos[0]), int(ball_pos[1])), ball_radius)
+    pygame.draw.circle(screen, GREEN, ( int(ball2_pos[0]), int(ball2_pos[1])), ball2_radius)
+    
     
     #display the graph:
     #adjust position as needed:
-    screen.blit(graph_surface, (50, 200))
+    screen.blit(graph_surface, (50, 50))
 
     #inserting the frame rate first and display next seems to run the program
 
     #cap the frame rate at 60 fps:
-    clock.tick(100)
+    clock.tick(360)
 
     #updating the display:
     pygame.display.flip()
