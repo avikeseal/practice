@@ -85,6 +85,26 @@ def create_graph(velocities):
     plt.close(fig)
     return raw_data, size
 
+#the main function initializes the Pygame screen, 
+#creates the bodies and runs the main loop:
+def main():
+    screen = pygame.display.set_mode(WIDTH, HEIGHT)
+    pygame.display.set_caption('Gravity Simulation')
+    clock = pygame.time.Clock()
 
+    #initializing bodies:
+    central_body = Body(WIDTH//2, HEIGHT//2, 1000, 20, RED)
+    moving_body = Body((WIDTH//2 + 200), HEIGHT//2, 1, 10, BLUE)
+    #initial velocity:
+    moving_body.vel = [0, -0.2]
+
+    bodies = [central_body, moving_body]
+    velocities = []
+
+    #main loop:
+    run = True
+    while run:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT
 
     
