@@ -20,6 +20,7 @@ pygame.display.set_caption("Circular motion")
 clock = pygame.time.Clock()
 
 #define colors:
+YELLOW = (255,255,0)
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 
@@ -33,6 +34,9 @@ orbital_radius = 200
 angle = 0
 #angular speed (radians per frame):
 angular_speed = 0.02
+
+#list to store path:
+orbital_path = []
 
 #main game loop:
 run = True
@@ -52,8 +56,15 @@ while run:
     ball_y = center_y + orbital_radius * math.sin(angle)
     angle += angular_speed
 
+    #store the position in the path list:
+    orbital_path.append((ball_x, ball_y))
+
     #fill the screen with black:
     screen.fill(BLACK)
+
+    #draw the orbital path:
+    if len(orbital_path) > 1:
+        pygame.draw.lines(screen, YELLOW, False, orbital_path, 2)
 
     #draw the ball:
     pygame.draw.circle(screen, RED, (int(ball_x), int(ball_y)), ball_radius)
