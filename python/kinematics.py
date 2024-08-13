@@ -68,6 +68,22 @@ class Body:
         if len(self.path) > 1:
             pygame.draw.lines(screen, self.color, False, self.path, 2)
 
+#this function creates a graph that displays velocities over time:
+def create_graph(velocities):
+    fig, ax = plt.subplots()
+    ax.plot(velocities, label='Velocity')
+    ax.axhline(y=np.min(velocities), color='r', linestyle='--', label='Min Velocity')
+    ax.axhline(y=np.max(velocities), color='g', linestyle='--', label='Max Velocity')
+    ax.legend()
+
+    canvas = FigureCanvas(fig)
+    canvas.draw()
+    renderer = canvas.get_renderer
+    raw_data = renderer.tostring_rgb()
+    size = canvas.get_width_height()
+    #close the figure to free up memory:
+    plt.close(fig)
+    return raw_data, size
 
 
 
