@@ -1,29 +1,30 @@
 #here is an attempt to optimize our program to make it run smoothly
 #importing necessary modules:
-import os
 import pygame
 import math
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 
-#setting the window to appear in middle of the screen:
-os.environ['SDL_VIDEO_CENTERED'] = '1'
+#screen dimensions:
+WIDTH, HEIGHT = 1500, 1800
+#screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("Gravity Simulation")
+
 
 #Initializing pygame:
 pygame.init()
 
-#display dimensions:
-WIDTH, HEIGHT = 2560, 1080
+
 
 #colors:
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)
-BLUE = (0, 0, 255)
+BLUE = (135, 206, 250)
 YELLOW = (255, 255, 0)
 
 #gravitational constant:
-G = 2
+G = 2.7
 
 #storage cap on position and velocities:
 MAX_PATH_LENGTH = 500
@@ -70,11 +71,11 @@ class Body:
     def draw(self, screen):
         pygame.draw.circle(screen, self.color,(int(self.pos[0]), int(self.pos[1])), self.radius)
         if len(self.path) > 1:
-            pygame.draw.lines(screen, self.color, False, self.path, 2)
+            pygame.draw.lines(screen, YELLOW, False, self.path, 2)
 
 #this function creates a graph that displays velocities over time:
-def create_graph(velocities, figsize=(4, 2)):
-    fig, ax = plt.subplots()
+def create_graph(velocities, figsize=(5, 7)):
+    fig, ax = plt.subplots(figsize=figsize)
     ax.plot(velocities, label='Velocity')
     ax.axhline(y=np.min(velocities), color='r', linestyle='--', label='Min Velocity')
     ax.axhline(y=np.max(velocities), color='g', linestyle='--', label='Max Velocity')
@@ -97,10 +98,10 @@ def main():
     clock = pygame.time.Clock()
 
     #initializing bodies:
-    central_body = Body(WIDTH//2, HEIGHT//2, 1000, 20, RED)
-    moving_body = Body((WIDTH//2 + 200), HEIGHT//2, 1, 10, BLUE)
+    central_body = Body(WIDTH//2 + 250, (HEIGHT//2 - 100), 1100, 60, RED)
+    moving_body = Body((WIDTH//2 + 500), (HEIGHT//2 - 100), 1, 15, BLUE)
     #initial velocity:
-    moving_body.vel = [0, -2]
+    moving_body.vel = [-2, -3]
 
     bodies = [central_body, moving_body]
     velocities = []
@@ -138,7 +139,7 @@ def main():
 
         #displaying the graph:
         #adjusted position:
-        screen.blit(graph_surface, (50, 40))
+        screen.blit(graph_surface, (40, 80))
 
         #cap the frame rate to 60 fps:
         clock.tick(60)
