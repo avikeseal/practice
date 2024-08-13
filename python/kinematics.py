@@ -13,30 +13,46 @@ pygame.init()
 
 
 #setting up the screen:
-screen = pygame.display.set_mode((800, 800))
-pygame.display.set_caption("Circular motion")
+WIDTH, HEIGHT = 800, 800
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("Gravity Simulation")
 
 #set up the clock for a decent framerate:
 clock = pygame.time.Clock()
 
 #define colors:
+
+GREEN = (0,128,0)
 YELLOW = (255,255,0)
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 
 #define the object:
+
+#radius:
 ball_radius = 20
-#center of the circular path:
-center_x, center_y = 400, 300
-#radius of the circular path:
-orbital_radius = 200
-#starting angle:  
-angle = 0
-#angular speed (radians per frame):
-angular_speed = 0.02
+#position of central object:
+ball_pos = [WIDTH // 2, HEIGHT // 2]
+ball_mass = 1000
+
+#defining moving object:
+
+#radius:
+ball2_radius = 10
+#position of second object:
+ball2_pos = [WIDTH // 2 + 200, HEIGHT // 2]
+#mass for second object:
+ball2_mass = 40
+#initial velocity:
+ball2_v = [0, -2]
+
+#gravitational constant:
+G = 1
+
+
 
 #list to store path:
-orbital_path = []
+path = []
 
 #main game loop:
 run = True
@@ -48,28 +64,33 @@ while run:
         if event.type == pygame.QUIT:
             run = False
 
-    #game state update:
-    #this updates the position of the ball to move in circular path
-    #calculates the new x and y coordinates using trig functions based on the current 'angle'.
-    #angle is then incremented by 'angular speed' to ensure continous motion:
-    ball_x = center_x + orbital_radius * math.cos(angle) 
-    ball_y = center_y + orbital_radius * math.sin(angle)
-    angle += angular_speed
+    #calculates the vector from first to second object:
+    dx = ball_pos[0] - ball2_pos[0]
+    dy = ball_pos[1] - ball2_pos[1]
+    distance = math.sqrt( (dx**2)  + (dy**2) )
 
-    #store the position in the path list:
-    orbital_path.append((ball_x, ball_y))
+    #calculating gravity:
+    if distance > 0:
+        force = (G * ball_mass * ball2_mass) / (distance**2)
+        angle = math.atan2(dy,dx)
+        force_x = force * math.cos(angle)
+        force_y = force * math.sin(angle)
+
+        #updating object's velocity:
+        ball2_v[0] += force_x / ball2_mass
+        ball2_v[1] += force_y / ball2_mass
+
+    #updating the object's position:
+    ball2_pos[0] += ball2_v[0]
+    ball2_pos[1] += ball2_v[1]
+
 
     #fill the screen with black:
     screen.fill(BLACK)
-
-    #draw the orbital path:
-    if len(orbital_path) > 1:
-        pygame.draw.lines(screen, YELLOW, False, orbital_path, 2)
-
     #draw the ball:
-    pygame.draw.circle(screen, RED, (int(ball_x), int(ball_y)), ball_radius)
-
-
+    pygame.draw.circle(screen, RED, (int(ball_pos[0]), int(ball_pos[1])), ball_radius)
+    pygame.draw.circle(screen, GREEN, (int(ball2_pos[0]), int(ball2_pos[1])), ball2_radius)    
+    
     #inserting the frame rate first and display next seems to run the program
 
     #cap the frame rate at 60 fps:
