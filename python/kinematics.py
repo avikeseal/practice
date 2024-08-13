@@ -7,7 +7,7 @@ import numpy as np
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 
 #screen dimensions:
-WIDTH, HEIGHT = 1200, 1200
+WIDTH, HEIGHT = 1200, 870
 win = pygame.display.set_mode((WIDTH, HEIGHT))
 #screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Gravity Simulation")
@@ -27,7 +27,7 @@ BLUE = (135, 206, 250)
 YELLOW = (255, 255, 0)
 
 #gravitational constant:
-G = 10
+G = 13
 
 #storage cap on position and velocities:
 MAX_PATH_LENGTH = 500
@@ -101,13 +101,15 @@ def main():
     clock = pygame.time.Clock()
 
     #initializing fonts:
-    font = pygame.font.SysFont(None, 50)
+    font_path = "cyberspace_font\Cyberspace Raceway Front.otf"
+    font = pygame.font.Font(font_path, 45)
+    font_color = YELLOW
 
     #initializing bodies:
     central_body = Body(WIDTH//2 + 250, (HEIGHT//2 - 100), 1000, 60, RED)
     moving_body = Body((WIDTH//2 + 500), (HEIGHT//2 - 100), 1, 15, BLUE)
     #initial velocity:
-    moving_body.vel = [-4, -6]
+    moving_body.vel = [-3.5, -6]
 
     bodies = [central_body, moving_body]
     velocities = []
@@ -141,7 +143,7 @@ def main():
         screen.fill(BLACK)
 
         #render the heading:
-        heading = font.render("Welcome to Gravity Simulation", True, WHITE)
+        heading = font.render("Welcome to Gravity Simulation", True, YELLOW)
         screen.blit(heading, (WIDTH//2 - heading.get_width()//2, 10))
 
 
