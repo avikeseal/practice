@@ -10,7 +10,7 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 pygame.init()
 
 #display dimensions:
-WIDTH, HEIGHT = 1200, 1700
+WIDTH, HEIGHT = 2560, 1080
 
 #colors:
 BLACK = (0, 0, 0)
@@ -19,7 +19,7 @@ BLUE = (0, 0, 255)
 YELLOW = (255, 255, 0)
 
 #gravitational constant:
-G = 0.01
+G = 2
 
 #storage cap on position and velocities:
 MAX_PATH_LENGTH = 500
@@ -69,7 +69,7 @@ class Body:
             pygame.draw.lines(screen, self.color, False, self.path, 2)
 
 #this function creates a graph that displays velocities over time:
-def create_graph(velocities):
+def create_graph(velocities, figsize=(4, 2)):
     fig, ax = plt.subplots()
     ax.plot(velocities, label='Velocity')
     ax.axhline(y=np.min(velocities), color='r', linestyle='--', label='Min Velocity')
@@ -78,7 +78,7 @@ def create_graph(velocities):
 
     canvas = FigureCanvas(fig)
     canvas.draw()
-    renderer = canvas.get_renderer
+    renderer = canvas.get_renderer()
     raw_data = renderer.tostring_rgb()
     size = canvas.get_width_height()
     #close the figure to free up memory:
@@ -88,7 +88,7 @@ def create_graph(velocities):
 #the main function initializes the Pygame screen, 
 #creates the bodies and runs the main loop:
 def main():
-    screen = pygame.display.set_mode(WIDTH, HEIGHT)
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption('Gravity Simulation')
     clock = pygame.time.Clock()
 
@@ -96,7 +96,7 @@ def main():
     central_body = Body(WIDTH//2, HEIGHT//2, 1000, 20, RED)
     moving_body = Body((WIDTH//2 + 200), HEIGHT//2, 1, 10, BLUE)
     #initial velocity:
-    moving_body.vel = [0, -0.2]
+    moving_body.vel = [0, -2]
 
     bodies = [central_body, moving_body]
     velocities = []
@@ -105,6 +105,48 @@ def main():
     run = True
     while run:
         for event in pygame.event.get():
-            if event.type == pygame.QUIT
+            if event.type == pygame.QUIT:
+                run = False
+
+        #calculates gravity and updates position:
+        for body in bodies:
+            if body != central_body:
+                body.apply_gravity(central_body)
+            if body != moving_body:
+                body.apply_gravity(moving_body)
+            body.update_position()
+
+        #calculate and store velocity for the moving body:
+        velocity = math.sqrt((moving_body.vel[0]**2) + (moving_body.vel[1]**2))
+        velocities.append(velocity)
+        #removing old velocity data to free up memory:
+        if len(velocities) > MAX_V_LENGTH:
+            velocities.pop(0)
+        
+        #creating the graph:
+        raw_data, size = create_graph(velocities)
+        graph_surface = pygame.image.fromstring(raw_data, size, 'RGB')
+
+        #drawing eveything:
+        screen.fill(BLACK)
+        for body in bodies:
+            body.draw(screen)
+
+        #displaying the graph:
+        #adjusted position:
+        screen.blit(graph_surface, (50, 40))
+
+        #cap the frame rate to 60 fps:
+        clock.tick(60)
+
+        #update the display:
+        pygame.display.flip()
+    
+    pygame.quit()
+
+if __name__ == "__main__":
+    main()
+
+
 
     
