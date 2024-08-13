@@ -27,8 +27,7 @@ MAX_V_LENGTH = 500
 
 #this class represents each object in the simulation
 #includes properties for position, velocity, mass, radius,
-#color and path
-#draw method handles drawing the object:
+#color and path:
 class Body:
     def __init__(self, x, y, mass, radius, color):
         self.pos = [x,y]
@@ -54,6 +53,22 @@ class Body:
             self.vel[1] += force_y / self.mass
 
     #update_position method updates the position based on velocity:
+    def update_position(self):
+        self.pos[0] += self.vel[0]
+        self.pos[1] += self.vel[1]
+        self.path.append((int(self.pos[0]), int(self.pos[1])))
+
+        #remove old path data to free up memory:
+        if len(self.path) > MAX_PATH_LENGTH:
+            self.path.pop(0)
+    
+    #draw method handles drawing the object:
+    def draw(self, screen):
+        pygame.draw.circle(screen, self.color,(int(self.pos[0]), int(self.pos[1])), self.radius)
+        if len(self.path) > 1:
+            pygame.draw.lines(screen, self.color, False, self.path, 2)
+
+
 
 
     
