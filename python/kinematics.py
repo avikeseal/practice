@@ -1,10 +1,14 @@
 #here is an attempt to optimize our program to make it run smoothly
 #importing necessary modules:
+import os
 import pygame
 import math
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+
+#setting the window to appear in middle of the screen:
+os.environ['SDL_VIDEO_CENTERED'] = '1'
 
 #Initializing pygame:
 pygame.init()
