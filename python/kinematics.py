@@ -1,149 +1,171 @@
-#trying to make an object move in circular motion:--------------------------------
-#we need to update its position based on trig functions (sine and cosine)
-#within the game loop.
-
-#install pygame:
+#here is an attempt to optimize our program to make it run smoothly
+#importing necessary modules:
 import pygame
-import sys
 import math
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 
-#intializing pygame:
-pygame.init()
-
-
-
-#setting up the screen:
-WIDTH, HEIGHT = (1000, 1000)
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
+#screen dimensions:
+WIDTH, HEIGHT = 1200, 870
+win = pygame.display.set_mode((WIDTH, HEIGHT))
+#screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Gravity Simulation")
 
-#set up the clock for a decent framerate:
-clock = pygame.time.Clock()
 
-#define colors:
+#Initializing pygame:
+pygame.init()
+pygame.font.init()
 
-GREEN = (0,128,0)
-YELLOW = (255,255,0)
+
+
+#colors:
+WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)
-
-#define the object:
-
-#radius:
-ball_radius = 20
-#position of central object:
-ball_pos = [WIDTH // 2, HEIGHT // 2]
-ball_mass = 1000
-
-#defining moving object:
-
-#radius:
-ball2_radius = 10
-#position of second object:
-ball2_pos = [WIDTH // 2 + 200, HEIGHT // 2]
-#mass for second object:
-ball2_mass = 1
-#initial velocity:
-ball2_v = [0, -5]
+BLUE = (135, 206, 250)
+YELLOW = (255, 255, 0)
 
 #gravitational constant:
-G = 5
+G = 13
 
+#storage cap on position and velocities:
+MAX_PATH_LENGTH = 500
+MAX_V_LENGTH = 500
 
+#this class represents each object in the simulation
+#includes properties for position, velocity, mass, radius,
+#color and path:
+class Body:
+    def __init__(self, x, y, mass, radius, color):
+        self.pos = [x,y]
+        self.vel = [0, 0]
+        self.mass = mass
+        self.radius = radius
+        self.color = color 
+        self.path = []
 
-#list to store path and velocities:
-path = []
-v = []
+    #apply_gravity method calculates gravity
+    def apply_gravity(self, other):
+        dx = other.pos[0] - self.pos[0]
+        dy = other.pos[1] - self.pos[1]
+        distance = math.sqrt( (dx**2) + (dy**2) )
 
-#main game loop:
-run = True
-while run:
-    #processes all events that pygame has recieved, 
-    #if an event of type 'pygame.QUIT'is detected
-    #it sets run to False which will exit the main loop:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            run = False
+        if distance > 0:
+            force = (G * self.mass * other.mass)/(distance**2)
+            angle = math.atan2(dy, dx)
+            force_x = force * math.cos(angle)
+            force_y = force * math.sin(angle)
 
-    #calculates the vector from first to second object:
-    dx = ball_pos[0] - ball2_pos[0]
-    dy = ball_pos[1] - ball2_pos[1]
-    distance = math.sqrt( (dx**2)  + (dy**2) )
+            self.vel[0] += force_x / self.mass
+            self.vel[1] += force_y / self.mass
 
-    #calculating gravity:
-    if distance > 0:
-        force = (G * ball_mass * ball2_mass) / (distance**2)
-        angle = math.atan2(dy,dx)
-        force_x = force * math.cos(angle)
-        force_y = force * math.sin(angle)
+    #update_position method updates the position based on velocity:
+    def update_position(self):
+        self.pos[0] += self.vel[0]
+        self.pos[1] += self.vel[1]
+        self.path.append((int(self.pos[0]), int(self.pos[1])))
 
-        #updating object's velocity:
-        ball2_v[0] += force_x / ball2_mass
-        ball2_v[1] += force_y / ball2_mass
+        #remove old path data to free up memory:
+        if len(self.path) > MAX_PATH_LENGTH:
+            self.path.pop(0)
+    
+    #draw method handles drawing the object:
+    def draw(self, screen):
+        pygame.draw.circle(screen, self.color,(int(self.pos[0]), int(self.pos[1])), self.radius)
+        if len(self.path) > 1:
+            pygame.draw.lines(screen, YELLOW, False, self.path, 2)
 
-    #updating the object's position:
-    ball2_pos[0] += ball2_v[0]
-    ball2_pos[1] += ball2_v[1]
-
-    #store the current position and velocity:
-    path.append((int(ball2_pos[0]), int(ball2_pos[1])))
-    velocity = math.sqrt( (ball2_v[0]**2) + (ball2_v[1]**2) )
-    v.append(velocity)
-
-    #create a graph using matplotlib:
-    #adjust figure size:
-    fig, ax = plt.subplots(figsize=(4,2))
-    #create figure:
-    ax.plot(v, label='velocity')
-
-    if len(v) > 0:
-        min_v = np.min(v)
-        max_v = np.max(v)
-        ax.axhline(y=min_v, color='r', linestyle='--', label='min velocity')
-        ax.axhline(y=max_v, color='g', linestyle='--', label='max velocity')
-
+#this function creates a graph that displays velocities over time:
+def create_graph(velocities, figsize=(5, 7)):
+    fig, ax = plt.subplots(figsize=figsize)
+    ax.plot(velocities, label='Velocity')
+    ax.axhline(y=np.min(velocities), color='r', linestyle='--', label='Min Velocity')
+    ax.axhline(y=np.max(velocities), color='g', linestyle='--', label='Max Velocity')
     ax.legend()
 
-    #rendering the graph to pygame:
     canvas = FigureCanvas(fig)
     canvas.draw()
     renderer = canvas.get_renderer()
     raw_data = renderer.tostring_rgb()
-
     size = canvas.get_width_height()
-    graph_surface =  pygame.image.fromstring(raw_data, size, "RGB")
     #close the figure to free up memory:
     plt.close(fig)
+    return raw_data, size
 
-    #fill the screen with black:
-    screen.fill(BLACK)
+#the main function initializes the Pygame screen, 
+#creates the bodies and runs the main loop:
+def main():
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    pygame.display.set_caption('Gravity Simulation')
+    clock = pygame.time.Clock()
 
-    if len(path) > 1:
-        pygame.draw.lines(screen, YELLOW, False, path, 2)
+    #initializing fonts:
+    font_path = "cyberspace_font\Cyberspace Raceway Front.otf"
+    font = pygame.font.Font(font_path, 45)
+    font_color = YELLOW
 
-    #draw the ball:
-    pygame.draw.circle(screen, RED, ( int(ball_pos[0]), int(ball_pos[1])), ball_radius)
-    pygame.draw.circle(screen, GREEN, ( int(ball2_pos[0]), int(ball2_pos[1])), ball2_radius)
+    #initializing bodies:
+    central_body = Body(WIDTH//2 + 250, (HEIGHT//2 - 100), 1000, 60, RED)
+    moving_body = Body((WIDTH//2 + 500), (HEIGHT//2 - 100), 1, 15, BLUE)
+    #initial velocity:
+    moving_body.vel = [-3.5, -6]
+
+    bodies = [central_body, moving_body]
+    velocities = []
+
+    run = True
+    while run:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+
+        #calculates gravity and updates position:
+        for body in bodies:
+            if body != central_body:
+                body.apply_gravity(central_body)
+            if body != moving_body:
+                body.apply_gravity(moving_body)
+            body.update_position()
+
+        #calculate and store velocity for the moving body:
+        velocity = math.sqrt((moving_body.vel[0]**2) + (moving_body.vel[1]**2))
+        velocities.append(velocity)
+        #removing old velocity data to free up memory:
+        if len(velocities) > MAX_V_LENGTH:
+            velocities.pop(0)
+        
+        #creating the graph:
+        raw_data, size = create_graph(velocities)
+        graph_surface = pygame.image.fromstring(raw_data, size, 'RGB')
+
+        #drawing eveything:
+        screen.fill(BLACK)
+
+        #render the heading:
+        heading = font.render("Welcome to Gravity Simulation", True, YELLOW)
+        screen.blit(heading, (WIDTH//2 - heading.get_width()//2, 10))
+
+
+
+        for body in bodies:
+            body.draw(screen)
+
+        #displaying the graph:
+        #adjusted position:
+        screen.blit(graph_surface, (40, 80))
+
+        #cap the frame rate to 60 fps:
+        clock.tick(60)
+
+        #update the display:
+        pygame.display.flip()
     
+    pygame.quit()
+
+if __name__ == "__main__":
+    main()
+
+
+
     
-    #display the graph:
-    #adjust position as needed:
-    screen.blit(graph_surface, (50, 50))
-
-    #inserting the frame rate first and display next seems to run the program
-
-    #cap the frame rate at 60 fps:
-    clock.tick(360)
-
-    #updating the display:
-    pygame.display.flip()
-
-#quit pygame:
-pygame.quit()
-sys.exit()
-
-
-
