@@ -153,7 +153,7 @@ def main():
 
         #displaying the graph:
         #adjusted position:
-        screen.blit(graph_surface, (40, 80))
+        screen.blit(graph_surface, (40, 113))
 
         #cap the frame rate to 60 fps:
         clock.tick(60)
