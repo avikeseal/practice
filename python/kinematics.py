@@ -6,6 +6,9 @@
 import pygame
 import sys
 import math
+import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 
 #intializing pygame:
 pygame.init()
@@ -13,7 +16,7 @@ pygame.init()
 
 
 #setting up the screen:
-WIDTH, HEIGHT = 800, 800
+WIDTH, HEIGHT = (1000, 1000)
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Gravity Simulation")
 
@@ -42,17 +45,18 @@ ball2_radius = 10
 #position of second object:
 ball2_pos = [WIDTH // 2 + 200, HEIGHT // 2]
 #mass for second object:
-ball2_mass = 40
+ball2_mass = 1
 #initial velocity:
-ball2_v = [0, -2]
+ball2_v = [0, -5]
 
 #gravitational constant:
-G = 1
+G = 5
 
 
 
-#list to store path:
+#list to store path and velocities:
 path = []
+v = []
 
 #main game loop:
 run = True
@@ -84,17 +88,55 @@ while run:
     ball2_pos[0] += ball2_v[0]
     ball2_pos[1] += ball2_v[1]
 
+    #store the current position and velocity:
+    path.append((int(ball2_pos[0]), int(ball2_pos[1])))
+    velocity = math.sqrt( (ball2_v[0]**2) + (ball2_v[1]**2) )
+    v.append(velocity)
+
+    #create a graph using matplotlib:
+    #adjust figure size:
+    fig, ax = plt.subplots(figsize=(4,2))
+    #create figure:
+    ax.plot(v, label='velocity')
+
+    if len(v) > 0:
+        min_v = np.min(v)
+        max_v = np.max(v)
+        ax.axhline(y=min_v, color='r', linestyle='--', label='min velocity')
+        ax.axhline(y=max_v, color='g', linestyle='--', label='max velocity')
+
+    ax.legend()
+
+    #rendering the graph to pygame:
+    canvas = FigureCanvas(fig)
+    canvas.draw()
+    renderer = canvas.get_renderer()
+    raw_data = renderer.tostring_rgb()
+
+    size = canvas.get_width_height()
+    graph_surface =  pygame.image.fromstring(raw_data, size, "RGB")
+    #close the figure to free up memory:
+    plt.close(fig)
 
     #fill the screen with black:
     screen.fill(BLACK)
+
+    if len(path) > 1:
+        pygame.draw.lines(screen, YELLOW, False, path, 2)
+
     #draw the ball:
-    pygame.draw.circle(screen, RED, (int(ball_pos[0]), int(ball_pos[1])), ball_radius)
-    pygame.draw.circle(screen, GREEN, (int(ball2_pos[0]), int(ball2_pos[1])), ball2_radius)    
+    pygame.draw.circle(screen, RED, ( int(ball_pos[0]), int(ball_pos[1])), ball_radius)
+    pygame.draw.circle(screen, GREEN, ( int(ball2_pos[0]), int(ball2_pos[1])), ball2_radius)
     
+    
+    #display the graph:
+    #adjust position as needed:
+    screen.blit(graph_surface, (50, 50))
+
     #inserting the frame rate first and display next seems to run the program
 
     #cap the frame rate at 60 fps:
-    clock.tick(60)
+    clock.tick(360)
 
     #updating the display:
     pygame.display.flip()
