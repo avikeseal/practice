@@ -1,0 +1,8 @@
+August 17th 2024
+Projects
+****************
+
+-delete design directory in practice
+-adjust plot height in gravity simulation
+-configure and download ubuntu on laptop
+
