@@ -16,7 +16,7 @@ pygame.init()
 
 
 #setting up the screen:
-WIDTH, HEIGHT = (1000, 1000)
+WIDTH, HEIGHT = (700, 1000)
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Gravity Simulation")
 
@@ -47,10 +47,10 @@ ball2_pos = [WIDTH // 2 + 200, HEIGHT // 2]
 #mass for second object:
 ball2_mass = 1
 #initial velocity:
-ball2_v = [0, -5]
+ball2_v = [1, -3]
 
 #gravitational constant:
-G = 5
+G = 4
 
 
 
@@ -136,7 +136,7 @@ while run:
     #inserting the frame rate first and display next seems to run the program
 
     #cap the frame rate at 60 fps:
-    clock.tick(360)
+    clock.tick(60)
 
     #updating the display:
     pygame.display.flip()
