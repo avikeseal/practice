@@ -5,4 +5,4 @@ Projects
 -delete design directory in practice
     -deletd design directory
 -adjust plot height in gravity simulation
--configure and download ubuntu on laptop
+-configure and download ubuntu on virtualbox windows
