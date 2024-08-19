@@ -3,6 +3,35 @@ Projects
 ****************
 
 -delete design directory in practice
-    -deletd design directory
 -adjust plot height in gravity simulation
 -configure and download ubuntu on virtualbox windows
+
+****************************************************************
+
+August 19th 2024
+Projects
+****************
+
+-adjust plot height in gravity simulation
+-delete design directory in practice
+    -deletd design directory
+-configure and download ubuntu on virtualbox windows
+    -installed ubuntu, running successfully
+
+Nuclear Physics
+****************
+
+-begin studying properties of nuclei
+-review lecture notes and start reading relevant sections from Fermi's Nuclear Physics
+-begin preparing for the first verbal quiz on properties of nuclei
+
+
+Wave Mechanics I
+****************
+
+-review lecture notes and concepts on the failure of classical Physics
+-begin reading chapter 1 of Zettili book
+
+****************************************************************
+
+
