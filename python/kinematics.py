@@ -100,8 +100,7 @@ def main():
     pygame.display.set_caption('Gravity Simulation')
     clock = pygame.time.Clock()
 
-    #initializing fonts:
-    font_path = "cyberspace_font\Cyberspace Raceway Front.otf"
+    font_path = "cyberspace_font/Cyberspace Raceway Front.otf"
     font = pygame.font.Font(font_path, 45)
     font_color = YELLOW
 
