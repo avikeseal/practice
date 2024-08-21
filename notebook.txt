@@ -6,7 +6,7 @@ Projects
 -adjust plot height in gravity simulation
 -configure and download ubuntu on virtualbox windows
 
-****************************************************************
+***********************************************************
 
 August 19th 2024
 Projects
@@ -32,6 +32,32 @@ Wave Mechanics I
 -review lecture notes and concepts on the failure of classical Physics
 -begin reading chapter 1 of Zettili book
 
-****************************************************************
+***********************************************************
 
+Auguts 21st 2024
+Projects
+********
+
+-started working on gravity-simulation
+-continue configuring vim and ubunutu virtual box
+	-research how to configure .vimrc
+
+Nuclear Physics
+***************
+
+-continue studying properties of nuclei
+	-pdf book on helhound
+-start reviewing lecture notes and take a  look at practice problems
+
+Wave Mechanics
+**************
+
+-continue studying blackbody radiation, planck rayleigh jean energy distribution
+
+Lab
+***
+
+-start learning IGOR
+
+***********************************************************
 
