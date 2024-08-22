@@ -65,14 +65,26 @@ August 22nd 2024
 Projects
 ********
 
+-gravity simulation
+	-write code for plot function
+-play around with some frontend exercises
+
 Nuclear Physics
 ***************
+
+-properties of nuclei
+	-review lecture notes and attempt practice problems
 
 Wave Mechanics I
 ****************
 
+-review class notes from today
+	-intensity, stopping potential, work function and photoelectric effect equations
+
 Lab
 ***
+
+email anup or arun about learning IGOR
 
 ************************************************************
 
